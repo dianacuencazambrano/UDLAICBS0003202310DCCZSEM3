@@ -14,7 +14,7 @@ def ext_channels():
         elif ses_db_stg == -2:
             raise Exception(f"Error trying to connect to the database")
 
-        #Diccionario de los valores de channels_ext
+        #Diccionario de los valores
         path = "csvs/channels.csv"
         channel_dic = {
             "channel_id" : [],
