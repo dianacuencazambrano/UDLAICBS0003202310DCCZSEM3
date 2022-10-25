@@ -9,7 +9,8 @@ class Settings:
     DB_PORT: str
     DB_USER: str
     DB_PASSWORD: str
-    DB: str
+    DB_STG: str
+    DB_SOR: str
 
 load_dotenv()
 
@@ -19,6 +20,7 @@ settings = Settings(
             DB_PORT=os.getenv('DB_PORT'),
             DB_USER=os.getenv('DB_USER'),
             DB_PASSWORD=os.getenv('DB_PASSWORD'),
-            DB=os.getenv('DB'),
+            DB_STG=os.getenv('DB_STG'),
+            DB_SOR=os.getenv('DB_SOR'),
         )
 
