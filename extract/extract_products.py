@@ -6,7 +6,7 @@ import traceback
 
 def ext_products():
     try:
-        con_db_stg = Db_Connection(settings.DB_TYPE, settings.DB_HOST, settings.DB_PORT, settings.DB_USER, settings.DB_PASSWORD, settings.DB)
+        con_db_stg = Db_Connection(settings.DB_TYPE, settings.DB_HOST, settings.DB_PORT, settings.DB_USER, settings.DB_PASSWORD, settings.DB_STG)
         ses_db_stg = con_db_stg.start()
 
         if ses_db_stg == -1:
@@ -46,7 +46,7 @@ def ext_products():
                         product_csv['SUPPLIER_ID'],
                         product_csv['PROD_STATUS'],
                         product_csv['PROD_LIST_PRICE'],
-                        product_csv['PROD_MIN_PRICE'],): 
+                        product_csv['PROD_MIN_PRICE']): 
 
                         product_dic["prod_id"].append(id),
                         product_dic["prod_name"].append(nam),

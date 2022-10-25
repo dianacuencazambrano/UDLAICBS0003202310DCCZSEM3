@@ -6,7 +6,7 @@ import traceback
 
 def ext_sales():
     try:
-        con_db_stg = Db_Connection(settings.DB_TYPE, settings.DB_HOST, settings.DB_PORT, settings.DB_USER, settings.DB_PASSWORD, settings.DB)
+        con_db_stg = Db_Connection(settings.DB_TYPE, settings.DB_HOST, settings.DB_PORT, settings.DB_USER, settings.DB_PASSWORD, settings.DB_STG)
         ses_db_stg = con_db_stg.start()
 
         if ses_db_stg == -1:

@@ -13,3 +13,21 @@ def obt_gender(gen):
 
 def obt_date(date_string):
     return datetime.strptime(date_string, '%Y-%m-%d')
+
+def str_2_int(string1):
+    if type(string1) is str:
+        num = int(string1)
+    elif type(string1) is int:
+        num = string1
+    else:
+        num = "NaN"
+    return num
+
+def str_2_float(string1):
+    if type(string1) is str:
+        num = float(string1)
+    elif type(string1) is float:
+        num = string1
+    else:
+        num = "NaN"
+    return num
