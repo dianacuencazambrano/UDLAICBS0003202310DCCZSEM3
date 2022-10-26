@@ -1,20 +1,11 @@
-from settings import settings
-from util.db_connection import Db_Connection
 from transform.transfomations import *
 
 import pandas as pd
 import traceback
 
-def tra_channels(etl_id):
+def tra_channels(etl_id, ses_db_stg):
     try:
-        con_db_stg = Db_Connection(settings.DB_TYPE, settings.DB_HOST, settings.DB_PORT, settings.DB_USER, settings.DB_PASSWORD, settings.DB_STG)
-        ses_db_stg = con_db_stg.start()
-
-        if ses_db_stg == -1:
-            raise Exception(f"The given database type {type} is not valid")
-        elif ses_db_stg == -2:
-            raise Exception(f"Error trying to connect to the database")
-
+        ses_db_stg.connect().execute("TRUNCATE TABLE channels_tra")
         #Diccionario de los valores
         channel_tra_dic = {
             "channel_id" : [],

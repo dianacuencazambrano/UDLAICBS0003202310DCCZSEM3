@@ -1,20 +1,11 @@
-from settings import settings
-from util.db_connection import Db_Connection
 from transform.transfomations import *
 
 import pandas as pd
 import traceback
 
-def tra_promotions(etl_id):
+def tra_promotions(etl_id, ses_db_stg):
     try:
-        con_db_stg = Db_Connection(settings.DB_TYPE, settings.DB_HOST, settings.DB_PORT, settings.DB_USER, settings.DB_PASSWORD, settings.DB_STG)
-        ses_db_stg = con_db_stg.start()
-
-        if ses_db_stg == -1:
-            raise Exception(f"The given database type {type} is not valid")
-        elif ses_db_stg == -2:
-            raise Exception(f"Error trying to connect to the database")
-
+        ses_db_stg.connect().execute("TRUNCATE TABLE promotions_tra")
         #Diccionario de los valores
         promotion_tra_dic = {
             "promo_id" : [],
@@ -41,7 +32,7 @@ def tra_promotions(etl_id):
                         promotion_tra_dic["promo_begin_date"].append(obt_date(beg)),
                         promotion_tra_dic["promo_end_date"].append(obt_date(end)),
                         promotion_tra_dic["etl_id"].append(etl_id)
-        if promotion_tra_dic["prod_id"]:
+        if promotion_tra_dic["promo_id"]:
             df_promotion_tra = pd.DataFrame(promotion_tra_dic)
             df_promotion_tra.to_sql('promotions_tra',
                                     ses_db_stg, 

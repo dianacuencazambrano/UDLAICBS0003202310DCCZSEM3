@@ -12,7 +12,7 @@ def obt_gender(gen):
         return 'NO DEFINIDO'
 
 def obt_date(date_string):
-    return datetime.strptime(date_string, '%Y-%m-%d')
+    return datetime.strptime(date_string, '%d-%b-%y')
 
 def str_2_int(string1):
     if type(string1) is str:

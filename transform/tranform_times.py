@@ -1,20 +1,11 @@
-from settings import settings
-from util.db_connection import Db_Connection
 from transform.transfomations import *
 
 import pandas as pd
 import traceback
 
-def tra_times(etl_id):
+def tra_times(etl_id, ses_db_stg):
     try:
-        con_db_stg = Db_Connection(settings.DB_TYPE, settings.DB_HOST, settings.DB_PORT, settings.DB_USER, settings.DB_PASSWORD, settings.DB_STG)
-        ses_db_stg = con_db_stg.start()
-
-        if ses_db_stg == -1:
-            raise Exception(f"The given database type {type} is not valid")
-        elif ses_db_stg == -2:
-            raise Exception(f"Error trying to connect to the database")
-
+        ses_db_stg.connect().execute("TRUNCATE TABLE times_tra")
         #Diccionario de los valores
         time_tra_dic = {
             "time_id" : [],
@@ -45,7 +36,7 @@ def tra_times(etl_id):
                         times_ext['CALENDAR_QUARTER_DESC'],
                         times_ext['CALENDAR_YEAR']): 
 
-                        time_tra_dic["time_id"].append(str_2_int(id)),
+                        time_tra_dic["time_id"].append(obt_date(id)),
                         time_tra_dic["day_name"].append(nam),
                         time_tra_dic["day_number_in_week"].append(str_2_int(day_wee)),
                         time_tra_dic["day_number_in_month"].append(str_2_int(day_mon)),
