@@ -5,7 +5,7 @@ import traceback
 
 def tra_customers(etl_id, ses_db_stg):
     try:
-        ses_db_stg.connect().execute("TRUNCATE TABLE customers_ext")
+        ses_db_stg.connect().execute("TRUNCATE TABLE customers_tra")
         #Diccionario de los valores
         customer_tra_dic = {
             "cust_id" : [],
@@ -64,7 +64,7 @@ def tra_customers(etl_id, ses_db_stg):
                         customer_tra_dic["etl_id"].append(etl_id)
         if customer_tra_dic["cust_id"]:
             df_customer_tra = pd.DataFrame(customer_tra_dic)
-            df_customer_tra.to_sql('customers_ext',
+            df_customer_tra.to_sql('customers_tra',
                                     ses_db_stg, 
                                     if_exists='append',
                                     index=False)

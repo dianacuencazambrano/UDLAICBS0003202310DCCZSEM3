@@ -1,7 +1,10 @@
+from extract.extract_customers import ext_customers
+from transform.tranform_customer import tra_customers
 from util.db_connection import Db_Connection
 from settings import settings
 
 from util.extract_all import extract_all
+from util.load_all import load_all
 from util.transform_all import transform_all
 from util.get_etl_id import get_etl_id
 
@@ -34,6 +37,12 @@ try:
         print("Transformation complete")
     else:
         print("Transformation failed")
+
+    #load the data
+    # if load_all(etl_id, ses_db_stg,ses_db_sor) == 1:
+    #     print("Load complete")
+    # else:
+    #     print("Load failed")
     
 except:
     traceback.print_exc()
