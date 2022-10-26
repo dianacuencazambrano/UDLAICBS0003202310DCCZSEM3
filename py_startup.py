@@ -1,27 +1,40 @@
-from extract.extract_channels import ext_channels
-from extract.extract_countries import ext_countries
-from extract.extract_customers import ext_customers
-from extract.extract_products import ext_products
-from extract.extract_promotions import ext_promotions
-from extract.extract_sales import ext_sales
-from extract.extract_times import ext_times
-from load.load_person import load_person
-from transform.tranform_person import tra_person
+from util.db_connection import Db_Connection
+from settings import settings
+
+from util.extract_all import extract_all
+from util.transform_all import transform_all
+from util.get_etl_id import get_etl_id
 
 import traceback
 
 try:
-    # ext_channels()
-    # ext_countries()
-    # ext_customers()
-    # ext_products()
-    # ext_promotions()
-    # ext_sales()
-    # ext_times()
+    con_db_stg = Db_Connection(settings.DB_TYPE, settings.DB_HOST, settings.DB_PORT, settings.DB_USER, settings.DB_PASSWORD, settings.DB_STG)
+    con_db_sor = Db_Connection(settings.DB_TYPE, settings.DB_HOST, settings.DB_PORT, settings.DB_USER, settings.DB_PASSWORD, settings.DB_SOR)
+    ses_db_stg = con_db_stg.start()
+    ses_db_sor = con_db_sor.start()
 
-    #tra_person()
-    load_person()
+    if ses_db_stg == -1 or ses_db_sor == -1:
+        raise Exception(f"The given database type {type} is not valid")
+    elif ses_db_stg == -2 or ses_db_stg == -2:
+        raise Exception(f"Error trying to connect to the database")
 
+    #etl process id
+    etl_id = get_etl_id(ses_db_stg)
+    etl_id = etl_id if etl_id !=0 else 'Error etl_id not found'
+    print("ETL Process ID: ", etl_id)
+
+    #extract all cvs files
+    if extract_all(ses_db_stg) == 1:
+        print("Extraction complete")
+    else:
+        print("Extraction failed")
+    
+    #transform the data
+    if transform_all(etl_id, ses_db_stg) == 1:
+        print("Transformation complete")
+    else:
+        print("Transformation failed")
+    
 except:
     traceback.print_exc()
 finally:

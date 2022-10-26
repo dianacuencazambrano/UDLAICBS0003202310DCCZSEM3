@@ -1,0 +1,4 @@
+DROP SCHEMA IF EXISTS dcczdbsor;
+CREATE SCHEMA dcczdbsor;
+DROP SCHEMA IF EXISTS dcczdbstg;
+CREATE SCHEMA dcczdbstg;
