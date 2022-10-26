@@ -1,19 +1,8 @@
-from settings import settings
-from util.db_connection import Db_Connection
-
 import pandas as pd
 import traceback
 
-def ext_channels():
+def ext_channels(ses_db_stg):
     try:
-        con_db_stg = Db_Connection(settings.DB_TYPE, settings.DB_HOST, settings.DB_PORT, settings.DB_USER, settings.DB_PASSWORD, settings.DB_STG)
-        ses_db_stg = con_db_stg.start()
-
-        if ses_db_stg == -1:
-            raise Exception(f"The given database type {type} is not valid")
-        elif ses_db_stg == -2:
-            raise Exception(f"Error trying to connect to the database")
-
         #Diccionario de los valores
         path = "csvs/channels.csv"
         channel_dic = {
@@ -24,7 +13,6 @@ def ext_channels():
         }
 
         channel_csv = pd.read_csv(path)
-        #print(channel_csv)
 
         #Procesar los archivos csv
 
