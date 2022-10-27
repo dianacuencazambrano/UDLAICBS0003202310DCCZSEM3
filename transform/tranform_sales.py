@@ -5,7 +5,6 @@ import traceback
 
 def tra_sales(etl_id, ses_db_stg):
     try:
-        ses_db_stg.connect().execute("TRUNCATE TABLE sales_tra")
         #Diccionario de los valores
         sale_tra_dic = {
             "prod_id" : [],

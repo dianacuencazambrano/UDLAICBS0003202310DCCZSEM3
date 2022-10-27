@@ -5,7 +5,6 @@ import traceback
 
 def tra_countries(etl_id, ses_db_stg):
     try:
-        ses_db_stg.connect().execute("TRUNCATE TABLE countries_tra")
         #Diccionario de los valores
         country_tra_dic = {
             "country_id" : [],
