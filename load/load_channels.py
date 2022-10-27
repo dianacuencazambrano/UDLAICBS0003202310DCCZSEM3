@@ -1,5 +1,4 @@
-from transform.transfomations import *
-
+from util.functions import *
 import pandas as pd
 import traceback
 
@@ -11,10 +10,12 @@ def load_channels(etl_id, ses_db_stg, ses_db_sor):
             "channel_desc" : [],
             "channel_class" : [],
             "channel_class_id" : [],
-            "etl_id" : [],
         }
 
-        channel_tra = pd.read_sql("SELECT CHANNEL_ID, CHANNEL_DESC, CHANNEL_CLASS, CHANNEL_CLASS_ID FROM channels_tra WHERE ETL_ID = {etl_id}", ses_db_stg)
+        channel_dic_dim = channel_dic
+
+        channel_tra = pd.read_sql(f"SELECT CHANNEL_ID, CHANNEL_DESC, CHANNEL_CLASS, CHANNEL_CLASS_ID FROM channels_tra WHERE ETL_ID = {etl_id}", ses_db_stg)
+        channel_dim = pd.read_sql("SELECT CHANNEL_ID, CHANNEL_DESC, CHANNEL_CLASS, CHANNEL_CLASS_ID FROM channels", ses_db_sor)
 
         if not channel_tra.empty:
             for id, des, cla, cla_id \
@@ -27,13 +28,25 @@ def load_channels(etl_id, ses_db_stg, ses_db_sor):
                         channel_dic["channel_desc"].append(des),
                         channel_dic["channel_class"].append(cla),
                         channel_dic["channel_class_id"].append(cla_id),
-                        channel_dic["etl_id"].append(etl_id)
-        if channel_dic["channel_id"]:
-            df_dim_cha = pd.DataFrame(channel_dic)
-            df_dim_cha.to_sql('channels',
-                                    ses_db_sor, 
-                                    if_exists='append',
-                                    index=False)
+
+        if not channel_dim.empty:
+            for id, des, cla, cla_id \
+                in zip(channel_dim['CHANNEL_ID'],
+                        channel_dim['CHANNEL_DESC'],
+                        channel_dim['CHANNEL_CLASS'],
+                        channel_dim['CHANNEL_CLASS_ID']): 
+
+                        channel_dic_dim["channel_id"].append(id),
+                        channel_dic_dim["channel_desc"].append(des),
+                        channel_dic_dim["channel_class"].append(cla),
+                        channel_dic_dim["channel_class_id"].append(cla_id),
+
+        if channel_dic_dim["channel_id"]:
+            resp = 'Channel : Sucess' if (append(channel_dic, channel_dic_dim, 'channels', ses_db_sor) == 1) else 'Channel : Fail'
+        else:
+            resp = 'Channel : Sucess' if (append(channel_dic_dim, 'channels', ses_db_sor) == 1) else 'Channel : Fail'
+            
+        print(resp)
 
     except:
         traceback.print_exc()

@@ -5,7 +5,6 @@ import traceback
 
 def tra_times(etl_id, ses_db_stg):
     try:
-        ses_db_stg.connect().execute("TRUNCATE TABLE times_tra")
         #Diccionario de los valores
         time_tra_dic = {
             "time_id" : [],
