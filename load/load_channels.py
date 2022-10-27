@@ -27,8 +27,9 @@ def load_channels(etl_id, ses_db_stg, ses_db_sor):
                         channel_dic["channel_id"].append(id),
                         channel_dic["channel_desc"].append(des),
                         channel_dic["channel_class"].append(cla),
-                        channel_dic["channel_class_id"].append(cla_id),
-
+                        channel_dic["channel_class_id"].append(cla_id)
+            if channel_dic_dim["channel_id"]:
+                resp = 'Channel : Sucess' if (append(channel_dic_dim, 'channels', ses_db_sor) == 1) else 'Channel : Fail'
         if not channel_dim.empty:
             for id, des, cla, cla_id \
                 in zip(channel_dim['CHANNEL_ID'],
@@ -41,11 +42,9 @@ def load_channels(etl_id, ses_db_stg, ses_db_sor):
                         channel_dic_dim["channel_class"].append(cla),
                         channel_dic_dim["channel_class_id"].append(cla_id),
 
-        if channel_dic_dim["channel_id"]:
-            resp = 'Channel : Sucess' if (append(channel_dic, channel_dic_dim, 'channels', ses_db_sor) == 1) else 'Channel : Fail'
-        else:
-            resp = 'Channel : Sucess' if (append(channel_dic_dim, 'channels', ses_db_sor) == 1) else 'Channel : Fail'
-            
+            if channel_dic_dim["channel_id"]:
+                resp = 'Channel : Sucess' if (merge_tables(channel_dic, channel_dic_dim, 'channels', ses_db_sor) == 1) else 'Channel : Fail'
+        
         print(resp)
 
     except:

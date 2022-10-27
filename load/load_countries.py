@@ -31,6 +31,8 @@ def load_countries(etl_id, ses_db_stg, ses_db_sor):
                         country_dic["country_name"].append(nam),
                         country_dic["country_region"].append(reg),
                         country_dic["country_region_id"].append(reg_id),
+            if country_dic_dim["country_id"]:
+                resp = 'Country : Sucess' if (append(country_dic_dim, 'countries', ses_db_sor) == 1) else 'Country : Fail'
         
         if not country_dim.empty:
             for id, nam, reg, reg_id \
@@ -44,10 +46,8 @@ def load_countries(etl_id, ses_db_stg, ses_db_sor):
                         country_dic_dim["country_region"].append(reg),
                         country_dic_dim["country_region_id"].append(reg_id),
 
-        if country_dic_dim["country_id"]:
-            resp = 'Country : Sucess' if (append(country_dic, country_dic_dim, 'countries', ses_db_sor) == 1) else 'Country : Fail'
-        else:
-            resp = 'Country : Sucess' if (append(country_dic_dim, 'countries', ses_db_sor) == 1) else 'Country : Fail'
+            if country_dic_dim["country_id"]:
+                resp = 'Country : Sucess' if (append(country_dic_dim, 'countries', ses_db_sor) == 1) else 'Country : Fail'
             
         print(resp)
 

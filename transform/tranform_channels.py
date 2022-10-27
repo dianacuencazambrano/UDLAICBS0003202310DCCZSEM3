@@ -5,6 +5,7 @@ import traceback
 
 def tra_channels(etl_id, ses_db_stg):
     try:
+        ses_db_stg.connect().execute("TRUNCATE TABLE channels_tra")
         #Diccionario de los valores
         channel_tra_dic = {
             "channel_id" : [],

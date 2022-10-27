@@ -33,6 +33,8 @@ def load_promotions(etl_id, ses_db_stg, ses_db_sor):
                         promotion_dic["promo_cost"].append(cos),
                         promotion_dic["promo_begin_date"].append(beg),
                         promotion_dic["promo_end_date"].append(end)
+            if promotion_dic_dim["promo_id"]:
+                resp = 'Promotion : Sucess' if (append(promotion_dic_dim, 'promotions', ses_db_sor) == 1) else 'Promotion : Fail'
 
         if not promotion_dim.empty:
             for id, nam, cos, beg, end \
@@ -48,10 +50,8 @@ def load_promotions(etl_id, ses_db_stg, ses_db_sor):
                         promotion_dic_dim["promo_begin_date"].append(beg),
                         promotion_dic_dim["promo_end_date"].append(end),
 
-        if promotion_dic_dim["promo_id"]:
-            resp = 'Promotion : Sucess' if (append(promotion_dic, promotion_dic_dim, 'promotions', ses_db_sor) == 1) else 'Promotion : Fail'
-        else:
-            resp = 'Promotion : Sucess' if (append(promotion_dic_dim, 'promotions', ses_db_sor) == 1) else 'Promotion : Fail'
+            if promotion_dic_dim["promo_id"]:
+                resp = 'Promotion : Sucess' if (merge_tables(promotion_dic, promotion_dic_dim, 'promotions', ses_db_sor) == 1) else 'Promotion : Fail'
             
         print(resp)
 

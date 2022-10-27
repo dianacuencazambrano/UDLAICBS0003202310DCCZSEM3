@@ -27,11 +27,11 @@ def load_customers(etl_id, ses_db_stg, ses_db_sor):
 
         customer_dic_dim = customer_dic
 
-        customer_tra = pd.read_sql(f"CUST_ID, CUST_FIRST_NAME,CUST_LAST_NAME,CUST_GENDER,CUST_YEAR_OF_BIRTH,CUST_MARITAL_STATUS,CUST_STREET_ADDRESS,CUST_POSTAL_CODE,CUST_CITY,CUST_STATE_PROVINCE,COUNTRY_ID,CUST_MAIN_PHONE_NUMBER,CUST_INCOME_LEVEL,CUST_CREDIT_LIMIT,CUST_EMAIL FROM customers_tra WHERE ETL_ID = {etl_id}", ses_db_stg)
+        customer_tra = pd.read_sql(f"SELECT CUST_ID, CUST_FIRST_NAME,CUST_LAST_NAME,CUST_GENDER,CUST_YEAR_OF_BIRTH,CUST_MARITAL_STATUS,CUST_STREET_ADDRESS,CUST_POSTAL_CODE,CUST_CITY,CUST_STATE_PROVINCE,COUNTRY_ID,CUST_MAIN_PHONE_NUMBER,CUST_INCOME_LEVEL,CUST_CREDIT_LIMIT,CUST_EMAIL FROM customers_tra WHERE ETL_ID = {etl_id}", ses_db_stg)
         customer_dim = pd.read_sql("SELECT CUST_ID, CUST_FIRST_NAME,CUST_LAST_NAME,CUST_GENDER,CUST_YEAR_OF_BIRTH,CUST_MARITAL_STATUS,CUST_STREET_ADDRESS,CUST_POSTAL_CODE,CUST_CITY,CUST_STATE_PROVINCE,COUNTRY_ID,CUST_MAIN_PHONE_NUMBER,CUST_INCOME_LEVEL,CUST_CREDIT_LIMIT,CUST_EMAIL FROM customers", ses_db_sor)
         
         dic_country = relations('ID', 'COUNTRY_ID', 'countries', ses_db_sor)
-
+        
         if not customer_tra.empty:
             for id, nam, las, gen, bir, sta, add, pos, cit, pro, country_id, pho, inc, cre, ema \
                 in zip(customer_tra['CUST_ID'],
@@ -66,6 +66,8 @@ def load_customers(etl_id, ses_db_stg, ses_db_sor):
                         customer_dic["cust_credit_limit"].append(cre)
                         customer_dic["cust_email"].append(ema),
 
+            if customer_dic_dim["cust_id"]:
+                resp = 'Customer : Sucess' if (append(customer_dic_dim, 'customers', ses_db_sor) == 1) else 'Customer : Fail'
         if not customer_dim.empty:
             for id, nam, las, gen, bir, sta, add, pos, cit, pro, cou, pho, inc, cre, ema \
                 in zip(customer_dim['CUST_ID'],
@@ -100,10 +102,8 @@ def load_customers(etl_id, ses_db_stg, ses_db_sor):
                         customer_dic_dim["cust_credit_limit"].append(cre)
                         customer_dic_dim["cust_email"].append(ema),
 
-        if customer_dic_dim["cust_id"]:
-            resp = 'Customer : Sucess' if (append(customer_dic, customer_dic_dim, 'customers', ses_db_sor) == 1) else 'Customer : Fail'
-        else:
-            resp = 'Customer : Sucess' if (append(customer_dic_dim, 'customers', ses_db_sor) == 1) else 'Customer : Fail'
+            if customer_dic_dim["cust_id"]:
+                resp = 'Customer : Sucess' if (merge_tables(customer_dic, customer_dic_dim, 'customers', ses_db_sor) == 1) else 'Customer : Fail'
             
         print(resp)
 

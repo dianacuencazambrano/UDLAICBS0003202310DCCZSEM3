@@ -19,7 +19,6 @@ def load_products(etl_id, ses_db_stg, ses_db_sor):
             "prod_status" : [],
             "prod_list_price" : [],
             "prod_min_price" : [],
-            "etl_id" : [],
         }
 
         product_dic_dim = product_dic
@@ -52,6 +51,8 @@ def load_products(etl_id, ses_db_stg, ses_db_sor):
                         product_dic["prod_status"].append(sta),
                         product_dic["prod_list_price"].append(lis),
                         product_dic["prod_min_price"].append(min)
+            if product_dic_dim["prod_id"]:
+                resp = 'Product : Sucess' if (append(product_dic_dim, 'products', ses_db_sor) == 1) else 'Product : Fail'
         
         if not product_dim.empty:
             for id, nam, des, cat, cat_id, cat_des, wei, sup, sta, lis, min \
@@ -78,11 +79,9 @@ def load_products(etl_id, ses_db_stg, ses_db_sor):
                         product_dic_dim["prod_status"].append(sta),
                         product_dic_dim["prod_list_price"].append(lis),
                         product_dic_dim["prod_min_price"].append(min)
-
-        if product_dic_dim["prod_id"]:
-            resp = 'Product : Sucess' if (append(product_dic, product_dic_dim, 'products', ses_db_sor) == 1) else 'Product : Fail'
-        else:
-            resp = 'Product : Sucess' if (append(product_dic_dim, 'products', ses_db_sor) == 1) else 'Product : Fail'
+                        
+            if product_dic_dim["prod_id"]:
+                resp = 'Product : Sucess' if (merge_tables(product_dic, product_dic_dim, 'products', ses_db_sor) == 1) else 'Product : Fail'
             
         print(resp)
 

@@ -49,6 +49,9 @@ def load_times(etl_id, ses_db_stg, ses_db_sor):
                         time_dic["calendar_quarter_desc"].append(cal_qua),
                         time_dic["calendar_year"].append(cal_yea)
 
+            if time_dic_dim["time_id"]:
+                resp = 'Time : Sucess' if (append(time_dic_dim, 'times', ses_db_sor) == 1) else 'Time : Fail'
+
         if not time_dim.empty:
             for id, nam, day_wee, day_mon, cal_wee, cal_mon, cal_mon_des, end_cal, cal_qua, cal_yea \
                 in zip(time_dim['TIME_ID'],
@@ -73,11 +76,9 @@ def load_times(etl_id, ses_db_stg, ses_db_sor):
                         time_dic_dim["calendar_quarter_desc"].append(cal_qua),
                         time_dic_dim["calendar_year"].append(cal_yea)
 
-        if time_dic_dim["time_id"]:
-            resp = 'Time : Sucess' if (append(time_dic, time_dic_dim, 'times', ses_db_sor) == 1) else 'Time : Fail'
-        else:
-            resp = 'Time : Sucess' if (append(time_dic_dim, 'times', ses_db_sor) == 1) else 'Time : Fail'
-            
+            if time_dic_dim["time_id"]:
+                resp = 'Time : Sucess' if (merge_tables(time_dic, time_dic_dim, 'times', ses_db_sor) == 1) else 'Time : Fail'
+        
         print(resp)
 
     except:

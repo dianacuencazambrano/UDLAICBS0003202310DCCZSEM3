@@ -15,7 +15,6 @@ def load_sales(etl_id, ses_db_stg, ses_db_sor):
             "promo_id" : [],
             "quantity_sold" : [],
             "amount_sold" : [],
-            "etl_id" : [],
         }
 
         sale_dic_dim = sale_dic
@@ -45,8 +44,9 @@ def load_sales(etl_id, ses_db_stg, ses_db_sor):
                         sale_dic["channel_id"].append(dic_channel[channel_id]),
                         sale_dic["promo_id"].append(dic_promotion[promo_id]),
                         sale_dic["quantity_sold"].append(qua),
-                        sale_dic["amount_sold"].append(amo),
-        
+                        sale_dic["amount_sold"].append(amo)
+            if sale_dic_dim["prod_id"]:
+                resp = 'Sale : Sucess' if (append(sale_dic_dim, 'sales', ses_db_sor) == 1) else 'Sale : Fail'
         if not sale_dim.empty:
             for pro_id, cus_id, tim_id, cha_id, prom_id, qua, amo \
                 in zip(sale_dim['PROD_ID'],
@@ -65,10 +65,9 @@ def load_sales(etl_id, ses_db_stg, ses_db_sor):
                         sale_dic_dim["quantity_sold"].append(qua),
                         sale_dic_dim["amount_sold"].append(amo),
 
-        if sale_dic_dim["prod_id"]:
-            resp = 'Sale : Sucess' if (append(sale_dic, sale_dic_dim, 'sales', ses_db_sor) == 1) else 'Sale : Fail'
-        else:
-            resp = 'Sale : Sucess' if (append(sale_dic_dim, 'sales', ses_db_sor) == 1) else 'Sale : Fail'
+            if sale_dic_dim["prod_id"]:
+                resp = 'Sale : Sucess' if (merge_tables(sale_dic, sale_dic_dim, 'sales', ses_db_sor) == 1) else 'Sale : Fail'
+            
             
         print(resp)
 
