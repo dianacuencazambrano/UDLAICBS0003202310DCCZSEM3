@@ -1,12 +1,3 @@
-from extract.extract_customers import ext_customers
-from load.load_channels import load_channels
-from load.load_countries import load_countries
-from load.load_customers import load_customers
-from load.load_products import load_products
-from load.load_promotions import load_promotions
-from load.load_sales import load_sales
-from load.load_times import load_times
-from transform.tranform_customer import tra_customers
 from util.db_connection import Db_Connection
 from settings import settings
 
@@ -29,30 +20,27 @@ try:
         raise Exception(f"Error trying to connect to the database")
 
     #etl process id
-    # etl_id = get_etl_id(ses_db_stg)
-    # etl_id = etl_id if etl_id !=0 else 'Error etl_id not found'
-    # print("ETL Process ID: ", etl_id)
+    etl_id = get_etl_id(ses_db_stg)
+    etl_id = etl_id if etl_id !=0 else 'Error etl_id not found'
+    print("ETL Process ID: ", etl_id)
 
-    # #extract all cvs files
-    # if extract_all(ses_db_stg) == 1:
-    #     print("Extraction complete")
-    # else:
-    #     print("Extraction failed")
+    #extract all cvs files
+    if extract_all(ses_db_stg) == 1:
+        print("Extraction complete")
+    else:
+        print("Extraction failed")
     
-    # #transform the data
-    # if transform_all(etl_id, ses_db_stg) == 1:
-    #     print("Transformation complete")
-    # else:
-    #     print("Transformation failed")
+    #transform the data
+    if transform_all(etl_id, ses_db_stg) == 1:
+        print("Transformation complete")
+    else:
+        print("Transformation failed")
 
-    # #load the data
-    # if load_all(etl_id, ses_db_stg, ses_db_sor) == 1:
-    #     print("Load complete")
-    # else:
-    #     print("Load failed")
-
-    #load_times(24, ses_db_stg, ses_db_sor)
-    load_sales(24, ses_db_stg, ses_db_sor)
+    #load the data
+    if load_all(etl_id, ses_db_stg, ses_db_sor) == 1:
+        print("Load complete")
+    else:
+        print("Load failed")
     
 except:
     traceback.print_exc()
